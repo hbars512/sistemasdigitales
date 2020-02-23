@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    {% if title %}
+      <title>{{ title }} - flaskduino</title>
+    {% else %}
+      <title>Flask con Arduino</title>
+    {% endif %}
+  </head>
+  <body>
+    <div>
+      flaskduino:
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('led') }}">Led</a>
+    </div>
+    <hr>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </body>
+</html>
