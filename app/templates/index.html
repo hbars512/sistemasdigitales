@@ -3,8 +3,26 @@
 {% block content %}
   <h1>Plataforma web para Arduino con Flask</h1>
   <h2>Proyecto - Seguridad y alumbrado con arduino</h2>
-  <p>
-    Esta plataforma web puede controlar el arduino
-  </p>
   <h4>Hi, {{ current_user.username }}!</h4>
+  <p>
+    Esta plataforma web puede ayudarte en el control de seguridad de tu casa
+  </p>
+  <p>
+    Puedes registar una casa <a href="{{ url_for('regcasa') }}">aquí</a>
+  </p>
+  {% if casas %}
+  <h3>Listado de Casas</h3>
+  <table>
+    <tr>
+      <th>id</th>
+      <th>direccion</th>
+    </tr>
+    {% for casa in casas %}
+      <tr>
+        <td> <a href="{{ url_for('casa') }}?cid={{casa.id}}">{{ casa.id }}</a></td>
+        <td>{{ casa.address }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
 {% endblock %}

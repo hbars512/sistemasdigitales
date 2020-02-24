@@ -5,17 +5,25 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from app import app, db
-from app.models import User
+from app.models import User, Casa
 from app.forms import LedControl
 from app.forms import LoginForm
 from app.forms import RegistrationForm
+from app.forms import RegCasa, RegLed, RegSensor
 # from app import board
 
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
-    return render_template('index.html', title='Home')
+    if not current_user.is_authenticated:
+        return render_template('index.html', title='Home')
+    user_id = current_user.get_id()
+    user = User.query.get(user_id)
+    casas = Casa.query.filter_by(propietario=user)
+
+    return render_template('index.html', title='Home', casas=casas)
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -42,7 +50,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/led', methods=['GET', 'POST'])
+@app.route('/ledcontrol', methods=['GET', 'POST'])
 @login_required
 def led():
     form = LedControl()
@@ -70,3 +78,28 @@ def register():
         flash('Felicidades, tu estas registrado ahora!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Registro', form=form)
+
+
+@app.route('/regcasa', methods=['GET', 'POST'])
+@login_required
+def regcasa():
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'))
+    user_id = current_user.get_id()
+    form = RegCasa()
+    user = User.query.get(user_id)
+    if form.validate_on_submit():
+        home = Casa(address=form.address.data, propietario=user)
+        db.session.add(home)
+        db.session.commit()
+        flash('Felicidades, has registrado tu casa!')
+        return redirect(url_for('index'))
+    return render_template('regcasa.html', title='Registro casa', user=user, form=form)
+
+
+@app.route('/casa')
+@login_required
+def casa():
+    casa_id = request.args.get('cid')
+    home = Casa.query.get(casa_id)
+    return render_template('casa.html', casa=home)

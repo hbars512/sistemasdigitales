@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% if casa %}
+  Tu casa está ubicada en {{ casa.address }}.
+  <p>
+    Puedes registar un farol {# <a href="{{ url_for('regled') }}">aquí</a> #}
+  </p>
+  {# {% if leds %} #}
+  {#   <h3>Listado de faroles</h3> #}
+  {#   <table> #}
+  {#     <tr> #}
+  {#       <th>id</th> #}
+  {#       <th>Estado</th> #}
+  {#       <th>Fecha</th> #}
+  {#     </tr> #}
+  {#     {% for led in leds %} #}
+  {#       <tr> #}
+  {#         <td><a href="{{ url_for('led') }}?lid={{led.id}}">{{ led.id }}</a></td> #}
+  {#         <td>{{ led.status }}</td> #}
+  {#         <td>{{ led.modificado }}</td> #}
+  {#       </tr> #}
+  {#     {% endfor %} #}
+  {#   </table> #}
+  {# {% endif %} #}
+  {#  #}
+  {# {% if leds %} #}
+  {#   <h3>Listado de Sensores</h3> #}
+  {#   <table> #}
+  {#     <tr> #}
+  {#       <th>id</th> #}
+  {#       <th>Estado</th> #}
+  {#       <th>Fecha</th> #}
+  {#     </tr> #}
+  {#     {% for sensor in sensores %} #}
+  {#       <tr> #}
+  {#         <td><a href="{{ url_for('sensor') }}?lid={{sensor.id}}">{{ sensor.id }}</a></td> #}
+  {#         <td>{{ sensor.status }}</td> #}
+  {#         <td>{{ sensor.modificado }}</td> #}
+  {#       </tr> #}
+  {#     {% endfor %} #}
+  {#   </table> #}
+  {# {% endif %} #}
+  {% endif %}
+{% endblock %}

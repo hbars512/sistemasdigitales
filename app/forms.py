@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, RadioField, SelectField, StringField
-from wtforms import PasswordField, BooleanField
+from wtforms import PasswordField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User
 
@@ -39,3 +39,15 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Por favor use una direccion de correo diferente')
+
+class RegCasa(FlaskForm):
+    address = StringField('Direccion', validators=[DataRequired()])
+    submit = SubmitField('Registrar')
+
+
+class RegLed(FlaskForm):
+    puerto = IntegerField('Puerto', validators=[DataRequired()])
+
+
+class RegSensor(FlaskForm):
+    puerto = IntegerField('Puerto', validators=[DataRequired()])
