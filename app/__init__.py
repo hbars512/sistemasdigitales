@@ -1,11 +1,16 @@
-import pyfirmata
+# import pyfirmata
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
-board = pyfirmata.Arduino('/dev/ttyACM0')
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+# board = pyfirmata.Arduino('/dev/ttyACM0')
 
 
-from app import routes
+
+from app import routes, models
