@@ -13,7 +13,11 @@
     <div>
       flaskduino:
       <a href="{{ url_for('index') }}">Inicio</a>
-      <a href="{{ url_for('login') }}">Ingresar</a>
+      {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}">Ingresar</a>
+      {% else %}
+        <a href="{{ url_for('logout') }}">Salir</a>
+      {% endif %}
       <a href="{{ url_for('led') }}">Led</a>
     </div>
     <hr>
