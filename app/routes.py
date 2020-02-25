@@ -133,6 +133,6 @@ def regsensor(cid):
 def casa():
     casa_id = request.args.get('cid')
     home = Casa.query.get(casa_id)
-    leds = Led.query.all()
-    sensores = Sensor.query.all()
+    leds = Led.query.filter(Led.domicilio.has(id=casa_id)).all()
+    sensores = Sensor.query.filter(Sensor.domicilio.has(id=casa_id)).all()
     return render_template('casa.html', casa=home, leds=leds, sensores=sensores)

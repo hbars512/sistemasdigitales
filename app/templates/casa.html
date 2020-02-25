@@ -6,6 +6,9 @@
     <p>
     Puedes registar un farol <a href="{{ url_for('regled', cid=casa.id) }}">aquí</a>
     </p>
+    <p>
+    Puedes registar un sensor <a href="{{ url_for('regsensor', cid=casa.id) }}">aquí</a>
+    </p>
     {% if leds %}
       <h3>Listado de faroles</h3>
       <table>

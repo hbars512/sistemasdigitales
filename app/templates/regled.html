@@ -2,7 +2,7 @@
 
 {% block content %}
   <h3>Registrar led para la casa ubicada en <b>{{ home.address }}</b></h3>
-  <form action="{{ url_for('regled') }}" method="post" novalidate>
+  <form action="{{ url_for('regled', cid=home.id) }}" method="post" novalidate>
     {{ form.hidden_tag() }}
     <p>
     {{ form.puerto.label }}<br>

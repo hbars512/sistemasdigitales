@@ -2,7 +2,7 @@
 
 {% block content %}
   <h3>Registrar sensor para la casa ubicada en <b>{{ home.address }}</b></h3>
-  <form action="{{ url_for('regsensor') }}" method="post" novalidate>
+  <form action="{{ url_for('regsensor', cid=home.id) }}" method="post" novalidate>
     {{ form.hidden_tag() }}
     <p>
     {{ form.puerto.label }}<br>
