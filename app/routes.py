@@ -49,19 +49,22 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/ledcontrol', methods=['GET', 'POST'])
+@app.route('/ledcontrol/<cid>', methods=['GET', 'POST'])
 @login_required
-def led():
+def ledcontrol(cid):
+    leds = Led.query.filter(Led.domicilio.has(id=cid)).all()
+    led_list = [(i.puerto, i.id) for i in leds]
     form = LedControl()
+    form.ledID.choices = led_list
 
     if form.validate_on_submit():
         if int(form.estado_pin.data) == 1:
-            board.digital[int(form.casa.data)].write(1)
+            board.digital[int(form.ledID.data)].write(1)
         else:
-            board.digital[int(form.casa.data)].write(0)
+            board.digital[int(form.ledID.data)].write(0)
         pass
 
-    return render_template('ledcontrol.html', title='Led Control', form=form)
+    return render_template('ledcontrol.html', title='Led Control', form=form, leds=leds)
 
 
 @app.route('/register', methods=['GET', 'POST'])

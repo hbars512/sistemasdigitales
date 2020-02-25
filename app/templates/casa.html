@@ -4,7 +4,8 @@
   {% if casa %}
     Tu casa está ubicada en {{ casa.address }}.
     <p>
-    Puedes registar un farol <a href="{{ url_for('regled', cid=casa.id) }}">aquí</a>
+    Puedes registar un farol <a href="{{ url_for('regled', cid=casa.id) }}">aquí</a><br>
+    Puedes controlar un farol <a href="{{ url_for('ledcontrol', cid=casa.id) }}">aquí</a>
     </p>
     <p>
     Puedes registar un sensor <a href="{{ url_for('regsensor', cid=casa.id) }}">aquí</a>
