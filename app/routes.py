@@ -5,7 +5,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from app import app, db
-from app.models import User, Casa
+from app.models import User, Casa, Led, Sensor
 from app.forms import LedControl
 from app.forms import LoginForm
 from app.forms import RegistrationForm
@@ -23,7 +23,6 @@ def index():
     casas = Casa.query.filter_by(propietario=user)
 
     return render_template('index.html', title='Home', casas=casas)
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -62,7 +61,7 @@ def led():
         #     board.digital[int(form.casa.data)].write(0)
         pass
 
-    return render_template('led.html', title='Led Control', form=form)
+    return render_template('ledcontrol.html', title='Led Control', form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -97,9 +96,43 @@ def regcasa():
     return render_template('regcasa.html', title='Registro casa', user=user, form=form)
 
 
+@app.route('/regled/<cid>', methods=['GET', 'POST'])
+@login_required
+def regled(cid):
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegLed()
+    home = Casa.query.get(cid)
+    if form.validate_on_submit():
+        farol = Led(puerto=form.puerto.data, domicilio=home)
+        db.session.add(farol)
+        db.session.commit()
+        flash('Felicidades, has registrado un farol!')
+        return redirect(url_for('index'))
+    return render_template('regled.html', title='Registro farol', home=home, form=form)
+
+
+@app.route('/regsensor/<cid>', methods=['GET', 'POST'])
+@login_required
+def regsensor(cid):
+    if not current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegSensor()
+    home = Casa.query.get(cid)
+    if form.validate_on_submit():
+        sen = Sensor(puerto=form.puerto.data, domicilio=home)
+        db.session.add(sen)
+        db.session.commit()
+        flash('Felicidades, has registrado un sensor!')
+        return redirect(url_for('index'))
+    return render_template('regsensor.html', title='Registro sensor', home=home, form=form)
+
+
 @app.route('/casa')
 @login_required
 def casa():
     casa_id = request.args.get('cid')
     home = Casa.query.get(casa_id)
-    return render_template('casa.html', casa=home)
+    leds = Led.query.all()
+    sensores = Sensor.query.all()
+    return render_template('casa.html', casa=home, leds=leds, sensores=sensores)

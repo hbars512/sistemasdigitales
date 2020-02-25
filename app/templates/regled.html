@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h3>Registrar led para la casa ubicada en <b>{{ home.address }}</b></h3>
+  <form action="{{ url_for('regled') }}" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+    {{ form.puerto.label }}<br>
+    {{ form.puerto() }}<br>
+    {% for error in form.puerto.errors %}
+      <span style="colos: red;">[{{ error }}]</span>
+    {% endfor %}
+    </p>
+    <p>{{ form.submit() }}</p>
+  </form>
+{% endblock %}

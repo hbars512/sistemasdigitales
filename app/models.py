@@ -5,6 +5,7 @@ from app import db
 from app import login
 
 class User(UserMixin, db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
     username = db.Column(db.String(64), index=True, unique=True)
@@ -23,12 +24,35 @@ class User(UserMixin, db.Model):
 
 
 class Casa(db.Model):
+    __tablename__ = 'casas'
     id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.String(100))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    leds = db.relationship('Led', backref='domicilio', lazy='dynamic')
+    sensores = db.relationship('Sensor', backref='domicilio', lazy='dynamic')
 
     def __repr__(self):
         return '<Casa {}>'.format(self.address)
+
+
+class Led(db.Model):
+    __tablename__ = 'leds'
+    id = db.Column(db.Integer, primary_key=True)
+    puerto = db.Column(db.Integer)
+    casa_id = db.Column(db.Integer, db.ForeignKey('casas.id'))
+
+    def __repr__(self):
+        return '<Led {}>'.format(self.puerto)
+
+
+class Sensor(db.Model):
+    __tablename__ = 'sensores'
+    id = db.Column(db.Integer, primary_key=True)
+    puerto = db.Column(db.Integer)
+    casa_id = db.Column(db.Integer, db.ForeignKey('casas.id'))
+
+    def __repr__(self):
+        return '<Sensor {}>'.format(self.puerto)
 
 
 @login.user_loader

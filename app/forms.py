@@ -47,7 +47,9 @@ class RegCasa(FlaskForm):
 
 class RegLed(FlaskForm):
     puerto = IntegerField('Puerto', validators=[DataRequired()])
+    submit = SubmitField('Registrar')
 
 
 class RegSensor(FlaskForm):
     puerto = IntegerField('Puerto', validators=[DataRequired()])
+    submit = SubmitField('Registrar')
