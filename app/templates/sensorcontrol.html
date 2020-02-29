@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div>
+    <h3>Controles para la Casa</h3>
+    <form action="" method="post" novalidate>
+      {{ form.hidden_tag() }}
+      <p>
+      {{ form.sensorID() }}<br>
+      {{ form.sensorID.label }}<br>
+      {% for error in form.sensorID.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+      {{ form.estado_pin() }}<br>
+      {{ form.estado_pin.label }}
+      {% for error in form.estado_pin.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+      {{ form.submit }}
+      </p>
+    </form>
+  </div>
+{% endblock %}
