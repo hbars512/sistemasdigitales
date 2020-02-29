@@ -1,3 +1,4 @@
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
@@ -40,6 +41,7 @@ class Led(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     puerto = db.Column(db.Integer)
     casa_id = db.Column(db.Integer, db.ForeignKey('casas.id'))
+    estados_led = db.relationship('EstadoLed', backref='led', lazy='dynamic')
 
     def __repr__(self):
         return '<Led {}>'.format(self.puerto)
@@ -50,9 +52,32 @@ class Sensor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     puerto = db.Column(db.Integer)
     casa_id = db.Column(db.Integer, db.ForeignKey('casas.id'))
+    estados_sensor = db.relationship('EstadoSensor', backref='sensor', lazy='dynamic')
 
     def __repr__(self):
         return '<Sensor {}>'.format(self.puerto)
+
+
+class EstadoLed(db.Model):
+    __tablename__ = 'estados_led'
+    id = db.Column(db.Integer, primary_key=True)
+    status = db.Column(db.String(20))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    led_id = db.Column(db.Integer, db.ForeignKey('leds.id'))
+
+    def __repr__(self):
+        return '<EstadoLed {} - {}>'.format(self.status, self.timestamp)
+
+
+class EstadoSensor(db.Model):
+    __tablename__ = 'estados_sensor'
+    id = db.Column(db.Integer, primary_key=True)
+    status = db.Column(db.String(20))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    sensor_id = db.Column(db.Integer, db.ForeignKey('sensores.id'))
+
+    def __repr__(self):
+        return '<EstadoSensor {} - {}>'.format(self.status, self.timestamp)
 
 
 @login.user_loader

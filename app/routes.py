@@ -111,7 +111,7 @@ def regled(cid):
         db.session.add(farol)
         db.session.commit()
         flash('Felicidades, has registrado un farol!')
-        return redirect(url_for('index'))
+        return redirect(url_for('casa', cid=cid))
     return render_template('regled.html', title='Registro farol', home=home, form=form)
 
 
