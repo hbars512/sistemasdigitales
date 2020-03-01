@@ -5,7 +5,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from app import app, db
-from app.models import User, Casa, Led, Sensor
+from app.models import User, Casa, Led, Sensor, EstadoLed, EstadoSensor
 from app.forms import LedControl
 from app.forms import LoginForm
 from app.forms import RegistrationForm
@@ -49,22 +49,26 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/ledcontrol/<cid>', methods=['GET', 'POST'])
+@app.route('/ledcontrol/<lid>', methods=['GET', 'POST'])
 @login_required
-def ledcontrol(cid):
-    leds = Led.query.filter(Led.domicilio.has(id=cid)).all()
-    led_list = [(i.puerto, i.id) for i in leds]
+def ledcontrol(lid):
+    led = Led.query.get(lid)
     form = LedControl()
-    form.ledID.choices = led_list
 
     if form.validate_on_submit():
         if int(form.estado_pin.data) == 1:
-            board.digital[int(form.ledID.data)].write(1)
+            board.digital[led.puerto].write(1)
+            sl = EstadoLed(status='encendido', led=led)
+            db.session.add(sl)
+            db.session.commit()
         else:
-            board.digital[int(form.ledID.data)].write(0)
+            board.digital[led.puerto].write(0)
+            sl = EstadoLed(status='apagado', led=led)
+            db.session.add(sl)
+            db.session.commit()
         pass
 
-    return render_template('ledcontrol.html', title='Led Control', form=form, leds=leds)
+    return render_template('ledcontrol.html', title='Led Control', form=form, led=led)
 
 
 @app.route('/register', methods=['GET', 'POST'])
