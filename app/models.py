@@ -39,7 +39,7 @@ class Casa(db.Model):
 class Led(db.Model):
     __tablename__ = 'leds'
     id = db.Column(db.Integer, primary_key=True)
-    puerto = db.Column(db.Integer)
+    puerto = db.Column(db.Integer, index=True, unique=True)
     casa_id = db.Column(db.Integer, db.ForeignKey('casas.id'))
     estados_led = db.relationship('EstadoLed', backref='led', lazy='dynamic')
 

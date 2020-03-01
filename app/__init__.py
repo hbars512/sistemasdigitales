@@ -15,4 +15,4 @@ login.login_view = 'login'
 board = pyfirmata.Arduino('/dev/ttyACM0')
 
 
-from app import routes, models
+from app import routes, models, errors
